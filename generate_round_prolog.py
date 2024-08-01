@@ -1,21 +1,18 @@
-import os
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.prompts import PromptTemplate
-import streamlit as st
 
+from redis_utils import get_key_events
 
 ### 라운드의 도입부 생성 ###
 
 
 # 프롬프트 1 (문제3개 활용한 도입부 생성)
-def generate_round_prolog(event1, event2, event3, full_story):
+def generate_round_prolog(event1, event2, event3):
     load_dotenv()
 
-    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-
-    llm = ChatOpenAI(api_key=OPENAI_API_KEY, model_name="gpt-4o-mini")
+    llm = ChatOpenAI(model="gpt-4o-mini")
 
     prompt = PromptTemplate.from_template(
         """
@@ -64,9 +61,6 @@ def generate_round_prolog(event1, event2, event3, full_story):
     event2 : {event1}
 
     event3 : {event3}
-    
-    ***[참고 이야기]***
-    full_story
 
     ***[도입부]***"""
     )
@@ -76,31 +70,15 @@ def generate_round_prolog(event1, event2, event3, full_story):
             "event1": RunnablePassthrough(),
             "event2": RunnablePassthrough(),
             "event3": RunnablePassthrough(),
-            "full_story": RunnablePassthrough(),
         }
         | prompt
         | llm
     )
 
-    response = chain.invoke(
-        {"event1": event1, "event2": event2, "event3": event3, "full_story": full_story}
-    )
+    response = chain.invoke({"event1": event1, "event2": event2, "event3": event3})
     print(response.content)
 
 
-event1 = "몽룡은 책을 읽으면서도 불안한 마음을 감추지 못하고 여러 번 앉았다 일어났다 하며 안절부절합니다. 그의 아버지인 부사는 몽룡의 열심히 공부하는 모습을 보고 기특하게 여깁니다. 그러나 몽룡은 자신의 마음속에 있는 춘향에 대한 그리움으로 인해 공부에 집중할 수 없는 상황입니다."
-event2 = "몽룡은 방자에게 춘향을 만나고 싶다는 마음을 드러냅니다. 방자는 몽룡에게 부모를 속이는 것이 옳지 않다고 경고하며, 춘향의 집에 몰래 가는 방법을 제안합니다. 방자는 몽룡이 아버지의 눈을 피하면서 춘향을 만날 수 있도록 도와주기로 결심합니다. 몽룡은 방자의 제안을 듣고 고민하지만, 결국 춘향을 만나고 싶다는 마음이 우세해집니다."
-event3 = '몽룡은 드디어 춘향의 집에 도착하게 되고, 두 사람은 감정을 나누며 서로의 존재에 대한 기쁨을 표현합니다. 몽룡은 춘향에게 "내가 오늘 밤에 찾아올 줄 몰랐더냐?"라고 말하며 서로의 마음을 확인합니다. 그들은 함께 시간을 보내며 사랑의 감정을 나누고, 아버지와의 관계에 대한 고민도 나누게 됩니다. 이 순간은 두 사람의 사랑이 더욱 깊어지는 계기가 됩니다.'
-
-
-def read_file(file_path):
-    with open(file_path, "r", encoding="utf-8") as file:
-        content = file.read()
-    return content
-
-
-file_path = "./full_story.txt"
-content = read_file(file_path)
-# print(content)
-
-generate_round_prolog(event1, event2, event3, content)
+if __name__ == "__main__":
+    data = get_key_events(1, 4)
+    generate_round_prolog(data[0], data[1], data[2])
