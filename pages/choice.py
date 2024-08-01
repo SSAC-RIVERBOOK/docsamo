@@ -68,4 +68,4 @@ if st.button("story"):
 
 show_menu(st.session_state.prev_page, st.session_state.game_page)
 
-switch_page("generate_question")
+switch_page("round_select")
