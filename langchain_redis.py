@@ -8,6 +8,7 @@ from langchain_core.prompts import PromptTemplate
 from langchain_core.runnables.base import RunnableSerializable
 from dotenv import load_dotenv
 import redis
+
 load_dotenv()
 
 # RecursiveCharacterTextSplitter 통해 가져온 정보를 chunk 로 쪼개기
@@ -42,6 +43,7 @@ llm = ChatOpenAI(model_name="gpt-4o-mini")
 
 chain = prompt | llm
 
+
 # 함수화
 def get_3key_events(
     number: int, splitter: CharacterTextSplitter, chain: RunnableSerializable
@@ -58,24 +60,19 @@ def get_3key_events(
 
     return response
 
+
 # response 타입 찍어보고 아래에 redis의 어떤 메소드 종류를 사용할 지 정할 수 있다.
-result = get_3key_events(1,splitter,chain)
+result = get_3key_events(1, splitter, chain)
 print(result)
 print(type(result.content))
 
 # print(get_3key_events(number=7, splitter=splitter, chain=chain))
 # 1~7편까지 들어갈 반복문(따로 바깥에서 get_3key_events 가 실행되게끔)
 
-r = redis.Redis(host="localhost",port=6379, db=0)
+r = redis.Redis(host="localhost", port=6379, db=0)
 r.set("chapter1_key_event", result.content)
 print(r.get("chapter1_key_event").decode("utf-8"))
 
 
 # 핵심사건 3가지 생성 후 임베딩하지 않고 redis에 저장하는 형식입니다.
 # 이 때 get_3key_events 의 number에 들어갈 인풋을 반복문으로 돌려야하고 함수밖에서 할지 안에서 할지 정해야합니다.
-
-
-
-
-
-

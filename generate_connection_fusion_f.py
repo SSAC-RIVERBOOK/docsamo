@@ -73,26 +73,36 @@ def generate_connection(first_story, second_story):
         | prompt
         | llm
     )
-    
+
     response = chain.invoke({"first_story": first_story, "second_story": second_story})
     return response.content
+
 
 if __name__ == "__main__":
 
     import redis, json
-    r = redis.Redis(host="localhost",port=6379, db=0)
 
-    list1 = json.dumps(['으앙! 아버지 배고파요! 아이들은 매일매일 울어 댔어요 "놀부형님께 가서 먹을 것 좀 얻어 오겠소"'])
-    list2 = json.dumps(["“형님, 곡식이 있으면 좀 나누어 주세요. 흥부가 놀부에게 말했어요” “예끼 이놈! 너 줄 곡식 없어! 당장 내집에서 나가!” 놀부는 몽둥이를 휘두르며 흥부를 쫓아 냈어 흥부는 부랴부랴 부엌으로 도망갔어요. 부엌에는 놀부의 아내가 밥을 푸고 있었어요. “ 아니 어딜 함부로 들어오는 거예요?” 놀부의 아내가 흥부를 내쫓았어요."])
+    r = redis.Redis(host="localhost", port=6379, db=0)
 
-    data = {
-        "first_story": list1,
-        "second_story": list2
-        }
+    list1 = json.dumps(
+        [
+            '으앙! 아버지 배고파요! 아이들은 매일매일 울어 댔어요 "놀부형님께 가서 먹을 것 좀 얻어 오겠소"'
+        ]
+    )
+    list2 = json.dumps(
+        [
+            "“형님, 곡식이 있으면 좀 나누어 주세요. 흥부가 놀부에게 말했어요” “예끼 이놈! 너 줄 곡식 없어! 당장 내집에서 나가!” 놀부는 몽둥이를 휘두르며 흥부를 쫓아 냈어 흥부는 부랴부랴 부엌으로 도망갔어요. 부엌에는 놀부의 아내가 밥을 푸고 있었어요. “ 아니 어딜 함부로 들어오는 거예요?” 놀부의 아내가 흥부를 내쫓았어요."
+        ]
+    )
+
+    data = {"first_story": list1, "second_story": list2}
 
     r.hmset("session_id0802", data)
 
-    result = generate_connection(json.loads(r.hget("session_id0802", "first_story")), json.loads(r.hget("session_id0802", "second_story")))
+    result = generate_connection(
+        json.loads(r.hget("session_id0802", "first_story")),
+        json.loads(r.hget("session_id0802", "second_story")),
+    )
 
     print(result)
     print(type(result))
