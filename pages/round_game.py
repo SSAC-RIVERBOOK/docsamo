@@ -47,7 +47,7 @@ def generate_question():
     st.session_state.second_option = result["text"][first_option_idx:]
 
 
-if st.session_state.prev_page is not "incorrect" and st.session_state.question is None:
+if st.session_state.prev_page is not "round_lose" and st.session_state.question is None:
     generate_question()
 
 st.write(st.session_state.question)
@@ -56,11 +56,11 @@ st.write(st.session_state.second_option)
 
 if st.button(f"{st.session_state.first_option}"):
     if st.session_state.select == "true":
-        switch_page("correct")
+        switch_page("round_win")
     else:
-        switch_page("incorrect")
+        switch_page("round_lose")
 if st.button(f"{st.session_state.second_option}"):
     if st.session_state.select == "true":
-        switch_page("incorrect")
+        switch_page("round_lose")
     else:
-        switch_page("correct")
+        switch_page("round_win")

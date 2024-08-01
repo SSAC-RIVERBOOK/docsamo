@@ -52,7 +52,7 @@ col1, col2, col3 = st.columns(3)
 with col1:
     if st.button("JOIN"):
         if map_arr[st.session_state.player_loc[1]][st.session_state.player_loc[0]] == 3:
-            switch_page("generate_question")
+            switch_page("round_game")
     if st.button("LEFT"):
         if st.session_state.player_loc[0] - 1 < 0:
             pass
