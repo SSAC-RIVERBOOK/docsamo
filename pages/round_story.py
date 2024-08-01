@@ -73,10 +73,15 @@ def generate_connection():
         | prompt
         | llm
     )
-    first_story = '으앙! 아버지 배고파요! 아이들은 매일매일 울어 댔어요 "놀부형님께 가서 먹을 것 좀 얻어 오겠소"'
-    second_story = "“형님, 곡식이 있으면 좀 나누어 주세요. 흥부가 놀부에게 말했어요” “예끼 이놈! 너 줄 곡식 없어! 당장 내집에서 나가!” 놀부는 몽둥이를 휘두르며 흥부를 쫓아 냈어 흥부는 부랴부랴 부엌으로 도망갔어요. 부엌에는 놀부의 아내가 밥을 푸고 있었어요. “ 아니 어딜 함부로 들어오는 거예요?” 놀부의 아내가 흥부를 내쫓았어요."
-    response = chain.invoke({"first_story": first_story, "second_story": second_story})
-    print(response.content)
+    # first_story = '으앙! 아버지 배고파요! 아이들은 매일매일 울어 댔어요 "놀부형님께 가서 먹을 것 좀 얻어 오겠소"'
+    # second_story = "“형님, 곡식이 있으면 좀 나누어 주세요. 흥부가 놀부에게 말했어요” “예끼 이놈! 너 줄 곡식 없어! 당장 내집에서 나가!” 놀부는 몽둥이를 휘두르며 흥부를 쫓아 냈어 흥부는 부랴부랴 부엌으로 도망갔어요. 부엌에는 놀부의 아내가 밥을 푸고 있었어요. “ 아니 어딜 함부로 들어오는 거예요?” 놀부의 아내가 흥부를 내쫓았어요."
+    response = chain.invoke(
+        {
+            "first_story": st.session_state.story,
+            "second_story": st.session_state.next_story,
+        }
+    )
+    st.write(response.content)
 
 
 generate_connection()

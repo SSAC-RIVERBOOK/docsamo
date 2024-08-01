@@ -28,7 +28,8 @@ result = chain(
 )
 
 st.write(result["text"])
-if st.button("다시 한번 풀어보기"):
-    switch_page("round_game")
+
+if st.button("이어서 진행해볼까요?"):
+    switch_page("round_story")
 
 show_menu(st.session_state.prev_page)
