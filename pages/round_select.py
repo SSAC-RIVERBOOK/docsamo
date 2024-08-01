@@ -22,6 +22,18 @@ map_arr = [
     [2, 2, 2, 2, 3, 0, 0, 0, 2, 2, 2, 2, 2, 3, 0],
 ]
 
+round_dict = {
+    (6, 4): 1,
+    (4, 0): 2,
+    (2, 6): 3,
+    (0, 11): 4,
+    (2, 9): 5,
+    (4, 8): 6,
+    (6, 13): 7,
+}
+
+st.session_state.round = 0
+
 
 def generate_map(map_arr, img_arr):
     img_size = img_arr[0].size[0]
@@ -52,6 +64,9 @@ col1, col2, col3 = st.columns(3)
 with col1:
     if st.button("JOIN"):
         if map_arr[st.session_state.player_loc[1]][st.session_state.player_loc[0]] == 3:
+            st.session_state.round = round_dict[
+                (st.session_state.player_loc[1], st.session_state.player_loc[0])
+            ]
             switch_page("round_game")
     if st.button("LEFT"):
         if st.session_state.player_loc[0] - 1 < 0:
