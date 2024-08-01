@@ -1,7 +1,9 @@
 import streamlit as st
 from PIL import Image
 import time
-from utils import switch_page
+from utils import switch_page, show_menu
+
+st.session_state.game_page = "round_select"
 
 st.title("라운드 선택")
 
@@ -85,7 +87,7 @@ with col2:
             st.session_state.player_loc[1] += 1
         dir = False
 with col3:
-    st.button("ㅇ")
+    st.button("새로고침")
     if st.button("RIGHT"):
         if st.session_state.player_loc[0] + 1 >= len(map_arr[0]):
             pass
@@ -109,3 +111,5 @@ if map_arr[st.session_state.player_loc[1]][st.session_state.player_loc[0]] == 1:
     else:
         st.session_state.player_loc[1] += 1
     st.rerun()
+
+show_menu(st.session_state.prev_page)

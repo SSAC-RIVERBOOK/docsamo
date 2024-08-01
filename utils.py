@@ -101,12 +101,12 @@ def show_menu(
         border (bool, optional): _description_. Defaults to False.
     """
     in_game_list = set(
-        ["prolog", "chapter", "round", "story", "problem", "solve", "ending"]
+        ["prolog", "chapter", "round_select", "story", "problem", "solve", "ending"]
     )
     page_name_mapper = {
         "prolog": "게임 소개",
         "chapter": "챕터 선택",
-        "round": "라운드",
+        "round_select": "라운드 선택",
         "story": "이야기 진행",
         "problem": "문제",
         "solve": "결과",
