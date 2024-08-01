@@ -57,12 +57,6 @@ st.markdown(
         height: 50px;
         background-color: #D9D9D9;
     }
-    .st-emotion-cache-187vdiz p {
-        word-break: break-word;
-        margin-bottom: 0px;
-        font-size: 24px;
-        font-weight: bold;
-    }
     </style>
     """,
     unsafe_allow_html=True,

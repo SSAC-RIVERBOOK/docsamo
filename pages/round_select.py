@@ -144,13 +144,26 @@ st.markdown(
     <style>
     .block-container {
         width: 100vw;
-        max-width: 816px;
+        max-width: 600px;
         height: 100vh;
-        max-height: 624px;
+        max-height: 600px;
         display: flex;
         flex-direction: column;
-        justify-content: flex-end;
+        justify-content: center;
         border-radius: 10px;
+    }
+    .st-emotion-cache-1v0mbdj {
+        display: flex;
+        flex-direction: column;
+        -webkit-box-align: stretch;
+        align-items: center;
+        width: auto;
+        -webkit-box-flex: 0;
+        flex-grow: 0;
+    }
+    img, svg {
+        vertical-align: middle;
+        max-width: 80%;
     }
     .st-emotion-cache-1jicfl2 {
         padding-left: 0rem;
@@ -162,9 +175,6 @@ st.markdown(
     .row-widget.stButton {
         display: flex;
         justify-content: center;
-    }
-    .st-emotion-cache-8542t9 {
-        gap: 5rem;
     }
     .st-emotion-cache-bm2z3a {
         display: flex;
