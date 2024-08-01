@@ -4,7 +4,10 @@ from langchain_openai import ChatOpenAI
 from langchain.chains import LLMChain
 import streamlit as st
 from langchain_utils import generate_prompt
-from utils import switch_page
+from utils import switch_page, show_menu
+
+# 페이지 이름 저장
+st.session_state.game_page = "round_game"
 
 # question, first_option, second_option 초기화
 if "question" not in st.session_state:
@@ -47,7 +50,7 @@ def generate_question():
     st.session_state.second_option = result["text"][first_option_idx:]
 
 
-if st.session_state.prev_page is not "round_lose" and st.session_state.question is None:
+if st.session_state.prev_page != "round_lose" and st.session_state.question is None:
     generate_question()
 
 st.write(st.session_state.question)
@@ -64,3 +67,5 @@ if st.button(f"{st.session_state.second_option}"):
         switch_page("round_lose")
     else:
         switch_page("round_win")
+
+show_menu(st.session_state.prev_page)
