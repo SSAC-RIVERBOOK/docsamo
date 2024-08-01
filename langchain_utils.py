@@ -36,7 +36,7 @@ def generate_prompt(file_path: str, prompt_variable: str) -> ChatPromptTemplate:
         ChatPromptTemplate: prompt template
     """
     system_prompt = load_prompt(file_path)
-    custom_prompt = ChatPromptTemplate(
+    custom_prompt = ChatPromptTemplate.from_messages(
         messages=[
             SystemMessagePromptTemplate.from_template(system_prompt),
             HumanMessagePromptTemplate.from_template(prompt_variable),
@@ -45,16 +45,14 @@ def generate_prompt(file_path: str, prompt_variable: str) -> ChatPromptTemplate:
     return custom_prompt
 
 
-def generate_question(story, select):
+def generate_question(story, select) -> str:
     load_dotenv()
-
     llm = ChatOpenAI(model="gpt-4o-mini")
 
-    prompt_path = "prompts/generate_question.prompt"
+    prompt_path = "prompts/generate_question2.prompt"
     prompt = generate_prompt(prompt_path, "{story}, {select}")
-    # prompt = generate_prompt(prompt_path, "{first_story}, {second_story}, {select}")
 
-    st.session_state.select = "false"
+    # prompt = generate_prompt(prompt_path, "{first_story}, {second_story}, {select}")
     chain = (
         {
             "story": RunnablePassthrough(),
@@ -69,10 +67,36 @@ def generate_question(story, select):
             "select": select,
         }
     )
+    return result.content
 
-    # question과 option들을 session_state에 저장
-    question_idx = result["text"].find("1")
-    st.session_state.question = result["text"][:question_idx]
-    first_option_idx = result["text"].find("2", question_idx)
-    st.session_state.first_option = result["text"][question_idx:first_option_idx]
-    st.session_state.second_option = result["text"][first_option_idx:]
+
+def generate_correct_solve(question, first_option, second_option):
+    load_dotenv()
+
+    llm = ChatOpenAI(model="gpt-4o-mini")
+
+    prompt_path = "prompts/generate_correct.prompt"
+    prompt = generate_prompt(prompt_path, "{question}, {first_option}, {second_option}")
+
+    chain = prompt | llm
+    result = chain.invoke(
+        {
+            "question": question,
+            "first_option": first_option,
+            "second_option": second_option,
+        }
+    )
+    return result.content
+
+
+def generate_wrong_solve(question, answer):
+    load_dotenv()
+    llm = ChatOpenAI(model="gpt-4o-mini")
+
+    prompt_path = "prompts/generate_false_story.prompt"
+    prompt = generate_prompt(prompt_path, "{question}, {answer}")
+
+    chain = prompt | llm
+    result = chain.invoke({"question": question, "answer": answer})
+
+    return result.content
