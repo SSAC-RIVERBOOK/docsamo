@@ -101,17 +101,15 @@ def show_menu(
         border (bool, optional): _description_. Defaults to False.
     """
     in_game_list = set(
-        ["prolog", "chapter", "round_select", "story", "problem", "solve", "ending"]
+        ["prolog", "chapter", "round_select", "round_game", "round_win", "round_lose"]
     )
     page_name_mapper = {
         "prolog": "게임 소개",
         "chapter": "챕터 선택",
         "round_select": "라운드 선택",
-        "story": "이야기 진행",
-        "problem": "문제",
-        "solve": "결과",
-        "ending": "라운드 엔딩",
-        "choice": "라운드 선택",
+        "round_game": "라운드 게임",
+        "round_win": "라운드 승리",
+        "round_lose": "라운드 패배",
     }
     with st.sidebar.container(border=border, height=height):
         st.header("메뉴")
