@@ -1,17 +1,15 @@
-import os
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.prompts import PromptTemplate
+from redis_utils import get_key_events
 import streamlit as st
 
 
-def generate_connection():
+def generate_connection(first_story, second_story):
     load_dotenv()
 
-    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-
-    llm = ChatOpenAI(api_key=OPENAI_API_KEY, model_name="gpt-4o-mini")
+    llm = ChatOpenAI(name="gpt-4o-mini")
 
     prompt = PromptTemplate.from_template(
         """
@@ -77,11 +75,15 @@ def generate_connection():
     # second_story = "“형님, 곡식이 있으면 좀 나누어 주세요. 흥부가 놀부에게 말했어요” “예끼 이놈! 너 줄 곡식 없어! 당장 내집에서 나가!” 놀부는 몽둥이를 휘두르며 흥부를 쫓아 냈어 흥부는 부랴부랴 부엌으로 도망갔어요. 부엌에는 놀부의 아내가 밥을 푸고 있었어요. “ 아니 어딜 함부로 들어오는 거예요?” 놀부의 아내가 흥부를 내쫓았어요."
     response = chain.invoke(
         {
-            "first_story": st.session_state.story,
-            "second_story": st.session_state.next_story,
+            "first_story": first_story,
+            "second_story": second_story,
         }
     )
-    st.write(response.content)
+
+    return response.content
 
 
-generate_connection()
+# 예시 chapter1 key event 2, 3
+data = get_key_events(2, 4)
+response = generate_connection(data[0], data[1])
+st.write(response)
