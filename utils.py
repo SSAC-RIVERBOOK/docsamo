@@ -117,16 +117,19 @@ def show_menu(
     with st.sidebar.container(border=border, height=height):
         st.header("메뉴")
         if current_page not in set(["start", "prolog"]):
-            if st.button("1. 메인 화면으로 이동"):
+            if st.button("1. 메인 화면으로 이동", use_container_width=True):
                 switch_page("start")
 
-            if st.button(f"2. 이전 ({page_name_mapper[prev_page]}) 화면으로 이동"):
+            if st.button(
+                f"2. 이전 ({page_name_mapper[prev_page]}) 화면으로 이동",
+                use_container_width=True,
+            ):
                 switch_page(prev_page)
 
             if current_page in in_game_list:
-                st.button("3. 지난 대화 보기")
+                st.button("3. 지난 대화 보기", use_container_width=True)
 
-        if st.button("4. 설정"):
+        if st.button("4. 설정", use_container_width=True):
             switch_page("settings")
 
 
