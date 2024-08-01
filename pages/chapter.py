@@ -20,7 +20,7 @@ with st.container():
         st.button("콩쥐팥쥐")
     with col5:
         if st.button("춘향전"):
-            switch_page("round")
+            switch_page("round_select")
     with col6:
         st.button("선녀와 나무꾼")
 
