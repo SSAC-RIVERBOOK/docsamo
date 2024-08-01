@@ -1,6 +1,9 @@
 import streamlit as st
 import datetime
 from typing import Optional, List
+import streamlit as st
+import pandas as pd
+import altair as alt
 
 
 def switch_page(page_name: str):
@@ -127,8 +130,39 @@ def show_menu(
             switch_page("settings")
 
 
+def get_chart(
+    category: list,
+    value: list,
+    valueuse_container_width: bool,
+):
+    """
+    도넛 차트를 만드는 차트
+
+    Args:
+        category (list): _description_
+        value (list): _description_
+        valueuse_container_width (bool): _description_
+    """
+    # category: 유형 value: 값
+    source = pd.DataFrame({"category": category, "value": value})
+
+    chart = (
+        alt.Chart(source)
+        .mark_arc(innerRadius=0)
+        .encode(
+            theta=alt.Theta(field="value", type="quantitative"),
+            color=alt.Color(field="category", type="nominal"),
+        )
+    )
+    st.altair_chart(chart, theme="streamlit", use_container_width=True)
+
+
 def show_user_data(
-    images: List[str], border: bool = False, height: Optional[int] = None
+    category: list,
+    value: list,
+    border: bool = False,
+    height: Optional[int] = None,
+    # chart에 category, value 값 넣을 예정
 ) -> None:
     """
     st.siderbar.container()를 이용해 사이드 바의 독립된 공간에
@@ -137,15 +171,17 @@ def show_user_data(
     border를 True로 두어 공간을 테두리로 감쌀 수 있습니다.
 
     Args:
-        images (List[str]): _description_
+        category (list): _description_
+        value (list): _description_
         border (bool, optional): _description_. Defaults to False.
         height (Optional[int], optional): _description_. Defaults to None.
     """
     with st.sidebar.container(border=border, height=height):
         st.header("사용자 데이터 분석")
-        st.write("분석 결과")
-        st.image(images[0], caption="강점")
-        st.image(images[1], caption="약점")
+        st.subheader("강점")
+        get_chart(category, value, True)  # 강점
+        st.subheader("약점")
+        get_chart(category, value, True)  # 약점
 
 
 def show_user_status(
