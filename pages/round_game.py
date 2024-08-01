@@ -47,7 +47,7 @@ def generate_question():
     st.session_state.second_option = result["text"][first_option_idx:]
 
 
-if st.session_state.prev_page is not "round_lose" and st.session_state.question is None:
+if st.session_state.prev_page != "round_lose" and st.session_state.question is None:
     generate_question()
 
 st.write(st.session_state.question)
