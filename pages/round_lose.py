@@ -17,7 +17,7 @@ prompt = generate_prompt(prompt_path, "{question}, {answer}")
 question = st.session_state.question
 
 # 선택한 정답이 뭔지 구분 -> 나중에 버튼이 생기면 없어질 부분
-if st.session_state.select is "true":
+if st.session_state.select == "true":
     answer = st.session_state.first_option
 else:
     answer = st.session_state.second_option
