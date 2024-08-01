@@ -8,15 +8,19 @@ from langchain_community.document_loaders import PyPDFLoader, TextLoader
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_chroma import Chroma
 from langchain_core.runnables import RunnablePassthrough
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder, PromptTemplate
+from langchain_core.prompts import (
+    ChatPromptTemplate,
+    MessagesPlaceholder,
+    PromptTemplate,
+)
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain.chains import create_history_aware_retriever, create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 
 load_dotenv()
 
-os.environ["LANGCHAIN_TRACING_V2"]="true"
-os.environ["LANGCHAIN_PROJECT"]="rag_with_redis0731"
+os.environ["LANGCHAIN_TRACING_V2"] = "true"
+os.environ["LANGCHAIN_PROJECT"] = "rag_with_redis0731"
 
 loader = TextLoader("./folktales/춘향전1편.txt")
 documents = loader.load()
@@ -37,7 +41,12 @@ text_splitter = CharacterTextSplitter(
 split_documents = text_splitter.split_documents(documents)
 embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
 
-rds = Redis.from_documents(documents=split_documents, embedding=embeddings, redis_url="redis://localhost:6379/0", index_name="chapter1")
+rds = Redis.from_documents(
+    documents=split_documents,
+    embedding=embeddings,
+    redis_url="redis://localhost:6379/0",
+    index_name="chapter1",
+)
 retriever = rds.as_retriever()
 result = retriever.invoke("춘향의 성격을 잘 드러내는 문서는?")
 print(result)
