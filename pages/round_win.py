@@ -4,11 +4,13 @@ from langchain.chains import LLMChain
 from utils import switch_page, show_menu
 
 st.session_state.game_page = "round_win"
+chapter, problem = st.session_state.chapter, st.session_state.problem
 
 result = generate_correct_solve(
     st.session_state.question,
     st.session_state.first_option,
     st.session_state.second_option,
+    chapter_num=chapter,
 )
 st.write(result)
 

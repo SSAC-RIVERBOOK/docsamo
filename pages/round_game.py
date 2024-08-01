@@ -1,11 +1,6 @@
-import os
-from dotenv import load_dotenv
-from langchain_openai import ChatOpenAI
-from langchain.chains import LLMChain
 import streamlit as st
 from langchain_utils import generate_question
 from utils import switch_page, show_menu
-from langchain_core.runnables import RunnablePassthrough
 from redis_utils import get_key_events
 import random
 
@@ -20,7 +15,9 @@ if "question" not in st.session_state:
 
 if st.session_state.prev_page != "round_lose" and st.session_state.question is None:
     # 예시 chapter1 key event 2
-    data = get_key_events(2, 3)
+    problem = st.session_state.problem
+    chapter = st.session_state.chapter
+    data = get_key_events(problem, problem + 1, chapter)
     randint = random.randint(0, 1)
     mapper = {0: "false", 1: "true"}
     st.session_state.select = mapper[randint]

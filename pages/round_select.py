@@ -71,6 +71,10 @@ with st.container():
                 st.session_state.round = round_dict[
                     (st.session_state.player_loc[1], st.session_state.player_loc[0])
                 ]
+                st.session_state.chapter = round_dict[
+                    (st.session_state.player_loc[1], st.session_state.player_loc[0])
+                ]
+                st.session_state.problem = 1
                 switch_page("round_game")
         if st.button("LEFT"):
             if st.session_state.player_loc[0] - 1 < 0:

@@ -122,6 +122,7 @@ def show_menu(
         "round_game": "라운드 게임",
         "round_win": "라운드 승리",
         "round_lose": "라운드 패배",
+        "round_story": "중간 이야기",
     }
     with st.sidebar.container(border=border, height=height):
         st.header("메뉴")

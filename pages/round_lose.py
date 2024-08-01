@@ -4,6 +4,7 @@ from utils import switch_page, show_menu
 
 # 페이지 이름 저장
 st.session_state.game_page = "round_lose"
+chapter, problem = st.session_state.chapter, st.session_state.problem
 
 # 선택한 정답이 뭔지 구분 -> 나중에 버튼이 생기면 없어질 부분
 if st.session_state.select == "true":
@@ -11,7 +12,7 @@ if st.session_state.select == "true":
 else:
     answer = st.session_state.second_option
 
-result = generate_wrong_solve(st.session_state.question, answer)
+result = generate_wrong_solve(st.session_state.question, answer, chapter_num=chapter)
 st.write(result)
 
 if st.button("다시 한번 풀어보기"):

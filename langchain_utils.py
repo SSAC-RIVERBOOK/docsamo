@@ -4,9 +4,10 @@ from langchain.prompts import (
     HumanMessagePromptTemplate,
 )
 from dotenv import load_dotenv
-from langchain_openai import ChatOpenAI
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_core.runnables import RunnablePassthrough
-import streamlit as st
+from langchain_community.vectorstores.redis import Redis
+from langchain_core.vectorstores import VectorStoreRetriever
 
 
 def load_prompt(file_path: str) -> str:
@@ -45,38 +46,47 @@ def generate_prompt(file_path: str, prompt_variable: str) -> ChatPromptTemplate:
     return custom_prompt
 
 
-def generate_question(story, select) -> str:
+def get_retriever(chapter_num: int, k_value=4):
+    embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
+    rds = Redis(
+        redis_url="redis://localhost:6379/0",
+        index_name=f"chapter{chapter_num}",
+        embedding=embeddings,
+    )
+    retriever = rds.as_retriever(search_kwargs={"k": k_value})
+    # retriever = VectorStoreRetriever(vectorstore=rds, search_type="similarity", search_kwargs={"k": k_value})
+
+    return retriever
+
+
+def generate_question(story, select, chapter_num=1) -> str:
     load_dotenv()
     llm = ChatOpenAI(model="gpt-4o-mini")
-
+    retriever = get_retriever(chapter_num=chapter_num, k_value=1)
     prompt_path = "prompts/generate_question2.prompt"
-    prompt = generate_prompt(prompt_path, "{story}, {select}")
+    prompt = generate_prompt(prompt_path, "{story}, {select}, {context}")
 
     # prompt = generate_prompt(prompt_path, "{first_story}, {second_story}, {select}")
-    chain = (
-        {
-            "story": RunnablePassthrough(),
-            "select": RunnablePassthrough(),
-        }
-        | prompt
-        | llm
-    )
+    chain = prompt | llm
     result = chain.invoke(
         {
             "story": story,
             "select": select,
+            "context": retriever.invoke(story),
         }
     )
     return result.content
 
 
-def generate_correct_solve(question, first_option, second_option):
+def generate_correct_solve(question, first_option, second_option, chapter_num=1):
     load_dotenv()
 
     llm = ChatOpenAI(model="gpt-4o-mini")
-
+    retriever = get_retriever(chapter_num=chapter_num, k_value=3)
     prompt_path = "prompts/generate_correct.prompt"
-    prompt = generate_prompt(prompt_path, "{question}, {first_option}, {second_option}")
+    prompt = generate_prompt(
+        prompt_path, "{question}, {first_option}, {second_option}, {context}"
+    )
 
     chain = prompt | llm
     result = chain.invoke(
@@ -84,19 +94,26 @@ def generate_correct_solve(question, first_option, second_option):
             "question": question,
             "first_option": first_option,
             "second_option": second_option,
+            "context": retriever.invoke(question),
         }
     )
     return result.content
 
 
-def generate_wrong_solve(question, answer):
+def generate_wrong_solve(question, answer, chapter_num=1):
     load_dotenv()
     llm = ChatOpenAI(model="gpt-4o-mini")
-
+    retriever = get_retriever(chapter_num=chapter_num, k_value=3)
     prompt_path = "prompts/generate_false_story.prompt"
-    prompt = generate_prompt(prompt_path, "{question}, {answer}")
+    prompt = generate_prompt(prompt_path, "{question}, {answer}, {context}")
 
     chain = prompt | llm
-    result = chain.invoke({"question": question, "answer": answer})
+    result = chain.invoke(
+        {
+            "question": question,
+            "answer": answer,
+            "context": retriever.invoke(question.replace("-", answer)),
+        }
+    )
 
     return result.content
