@@ -1,5 +1,7 @@
 import streamlit as st
-from utils import show_menu, switch_page
+from utils import show_menu, show_user_data, show_user_status, switch_page
+
+st.set_page_config(page_title="맞춤법 용사, 마춤뺌 마왕", page_icon=None, layout="wide")
 
 st.session_state.game_page = "prolog"
 
@@ -13,3 +15,5 @@ with st.container():
             switch_page("chapter")
 
 show_menu(st.session_state.prev_page, st.session_state.game_page)
+show_user_data(["유형1", "유형2", "유형3"], [3, 7, 10], True, 400)
+show_user_status("이주배경어린이", "마지막 진행상황(챕터-라운드)", border=True)

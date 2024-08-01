@@ -120,6 +120,7 @@ def show_menu(
             if st.button("1. 메인 화면으로 이동", use_container_width=True):
                 switch_page("start")
 
+        if current_page not in set(["start", "prolog"]):
             if st.button(
                 f"2. 이전 ({page_name_mapper[prev_page]}) 화면으로 이동",
                 use_container_width=True,

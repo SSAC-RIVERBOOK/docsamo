@@ -1,5 +1,5 @@
 import streamlit as st
-from utils import show_menu, show_user_data, switch_page
+from utils import show_menu, show_user_data, show_user_status, switch_page
 
 st.set_page_config(page_title="맞춤법 용사, 마춤뺌 마왕", page_icon=None, layout="wide")
 
@@ -20,9 +20,9 @@ st.markdown(
     }
     .block-container {
         width: 100vw;
-        max-width: 600px;
+        max-width: 816px;
         height: 100vh;
-        max-height: 450px;
+        max-height: 624px;
         background-color: #f0f0f0;
         display: flex;
         flex-direction: column;
@@ -53,7 +53,15 @@ st.markdown(
         flex-direction: row;
     }
     .st-emotion-cache-1vt4y43 {
+        width: 200px;
+        height: 50px;
         background-color: #D9D9D9;
+    }
+    .st-emotion-cache-187vdiz p {
+        word-break: break-word;
+        margin-bottom: 0px;
+        font-size: 24px;
+        font-weight: bold;
     }
     </style>
     """,
@@ -62,3 +70,4 @@ st.markdown(
 
 show_menu(prev_page="", current_page=st.session_state.game_page)
 show_user_data(["유형1", "유형2", "유형3"], [3, 7, 10], True, 400)
+show_user_status("이주배경어린이", "마지막 진행상황(챕터-라운드)", border=True)
