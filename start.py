@@ -4,7 +4,7 @@ from utils import show_menu, show_user_data, show_user_status, switch_page
 st.set_page_config(page_title="맞춤법 용사, 마춤뺌 마왕", page_icon=None, layout="wide")
 
 st.session_state.game_page = "start"
-
+st.session_state.chapter = 1
 with st.container():
     st.title("맞춤법 용사, 마춤뻡 마왕")
     if st.button("시작"):
