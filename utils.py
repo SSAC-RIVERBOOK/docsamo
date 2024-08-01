@@ -1,6 +1,9 @@
 import streamlit as st
 import datetime
 from typing import Optional, List
+import streamlit as st
+import pandas as pd
+import altair as alt
 
 
 def switch_page(page_name: str):
@@ -127,8 +130,33 @@ def show_menu(
             switch_page("settings")
 
 
+def get_chart(
+    valueuse_container_width: bool,
+):  # category: list, value: list, 추가해서 시각화할 예정
+    """
+    sidebar에 도넛 차트 생성 시 사용
+    Args:
+        valueuse_container_width (bool): _description_
+    """
+    # category: 유형 value: 값
+    source = pd.DataFrame(
+        {"category": ["유형1", "유형2", "유형3"], "value": [4, 6, 10]}
+    )
+
+    chart = (
+        alt.Chart(source)
+        .mark_arc(innerRadius=50)
+        .encode(
+            theta=alt.Theta(field="value", type="nominal"),
+            color=alt.Color(field="category", type="nominal"),
+        )
+    )
+    st.altair_chart(chart, theme="streamlit", use_container_width=True)
+
+
 def show_user_data(
-    images: List[str], border: bool = False, height: Optional[int] = None
+    border: bool = False,
+    height: Optional[int] = None,  # chart에 category, value 값 넣을 예정
 ) -> None:
     """
     st.siderbar.container()를 이용해 사이드 바의 독립된 공간에
@@ -143,9 +171,10 @@ def show_user_data(
     """
     with st.sidebar.container(border=border, height=height):
         st.header("사용자 데이터 분석")
-        st.write("분석 결과")
-        st.image(images[0], caption="강점")
-        st.image(images[1], caption="약점")
+        st.subheader("강점")
+        get_chart(True)  # 강점
+        st.subheader("약점")
+        get_chart(True)  # 약점
 
 
 def show_user_status(
