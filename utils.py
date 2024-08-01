@@ -100,8 +100,13 @@ def show_menu(
         height (Optional[int], optional): _description_. Defaults to None.
         border (bool, optional): _description_. Defaults to False.
     """
-    in_game_list = set(["story", "problem", "solve", "ending"])
+    in_game_list = set(
+        ["prolog", "chapter", "round", "story", "problem", "solve", "ending"]
+    )
     page_name_mapper = {
+        "prolog": "게임 소개",
+        "chapter": "챕터 선택",
+        "round": "라운드",
         "story": "이야기 진행",
         "problem": "문제",
         "solve": "결과",
@@ -110,14 +115,15 @@ def show_menu(
     }
     with st.sidebar.container(border=border, height=height):
         st.header("메뉴")
-        if st.button("1. 메인 화면으로 이동"):
-            switch_page("navigator")
+        if current_page not in set(["start", "prolog"]):
+            if st.button("1. 메인 화면으로 이동"):
+                switch_page("start")
 
-        if current_page in in_game_list:
             if st.button(f"2. 이전 ({page_name_mapper[prev_page]}) 화면으로 이동"):
                 switch_page(prev_page)
 
-            st.button("3. 지난 대화 보기")
+            if current_page in in_game_list:
+                st.button("3. 지난 대화 보기")
 
         if st.button("4. 설정"):
             switch_page("settings")
