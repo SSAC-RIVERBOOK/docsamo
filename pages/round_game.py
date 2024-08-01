@@ -52,11 +52,11 @@ def generate_question(story, select) -> str:
 
 if st.session_state.prev_page != "round_lose" and st.session_state.question is None:
     # 예시 chapter1 key event 2
-    data = get_key_events(2, 3)
+    data = get_key_events(2, 3)  # redis 에시 데이터 가져오기
     randint = random.randint(0, 1)
     mapper = {0: "false", 1: "true"}
     st.session_state.select = mapper[randint]
-
+    # data[0] 대신에 핵심 사건 하드코딩
     result = generate_question(data[0], st.session_state.select)
 
     question_idx = result.find("1")

@@ -4,6 +4,9 @@ from langchain_openai import ChatOpenAI
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.prompts import PromptTemplate
 import streamlit as st
+from utils import show_menu
+
+st.session_state.game_name = "round_story"
 
 
 def generate_connection():
@@ -85,3 +88,5 @@ def generate_connection():
 
 
 generate_connection()
+
+show_menu(st.session_state.prev_page)
