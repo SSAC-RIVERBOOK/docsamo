@@ -3,6 +3,10 @@ from langchain.prompts import (
     SystemMessagePromptTemplate,
     HumanMessagePromptTemplate,
 )
+from dotenv import load_dotenv
+from langchain_openai import ChatOpenAI
+from langchain_core.runnables import RunnablePassthrough
+import streamlit as st
 
 
 def load_prompt(file_path: str) -> str:
@@ -39,3 +43,36 @@ def generate_prompt(file_path: str, prompt_variable: str) -> ChatPromptTemplate:
         ]
     )
     return custom_prompt
+
+
+def generate_question(story, select):
+    load_dotenv()
+
+    llm = ChatOpenAI(model="gpt-4o-mini")
+
+    prompt_path = "prompts/generate_question.prompt"
+    prompt = generate_prompt(prompt_path, "{story}, {select}")
+    # prompt = generate_prompt(prompt_path, "{first_story}, {second_story}, {select}")
+
+    st.session_state.select = "false"
+    chain = (
+        {
+            "story": RunnablePassthrough(),
+            "select": RunnablePassthrough(),
+        }
+        | prompt
+        | llm
+    )
+    result = chain.invoke(
+        {
+            "story": story,
+            "select": select,
+        }
+    )
+
+    # question과 option들을 session_state에 저장
+    question_idx = result["text"].find("1")
+    st.session_state.question = result["text"][:question_idx]
+    first_option_idx = result["text"].find("2", question_idx)
+    st.session_state.first_option = result["text"][question_idx:first_option_idx]
+    st.session_state.second_option = result["text"][first_option_idx:]
