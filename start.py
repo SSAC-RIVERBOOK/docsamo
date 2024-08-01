@@ -54,7 +54,6 @@ st.markdown(
     }
     .st-emotion-cache-1vt4y43 {
         background-color: #D9D9D9;
-        font-size: 24px;
     }
     </style>
     """,
