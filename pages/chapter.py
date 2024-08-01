@@ -29,10 +29,9 @@ st.markdown(
     <style>
     .block-container {
         width: 100vw;
-        max-width: 816px;
+        max-width: 600px;
         height: 100vh;
-        max-height: 624px;
-        background-color: #f0f0f0;
+        max-height: 600px;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -60,7 +59,7 @@ st.markdown(
     }
     .st-emotion-cache-1vt4y43 {
         width: 150px;
-        height: 100px;
+        height: 200px;
         background-color: #D9D9D9;
     }
     .st-emotion-cache-ocqkz7 {

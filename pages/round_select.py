@@ -199,7 +199,7 @@ st.markdown(
         align-items: stretch;
         gap: 0rem;
     }
-    </style>
+    </style>        
     """,
     unsafe_allow_html=True,
 )
