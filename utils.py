@@ -104,10 +104,19 @@ def show_menu(
         border (bool, optional): _description_. Defaults to False.
     """
     in_game_list = set(
-        ["prolog", "chapter", "round_select", "round_game", "round_win", "round_lose"]
+        [
+            "start",
+            "prolog",
+            "chapter",
+            "round_select",
+            "round_game",
+            "round_win",
+            "round_lose",
+        ]
     )
     page_name_mapper = {
-        "prolog": "게임 소개",
+        "start": "시작화면",
+        "prolog": "게임소개",
         "chapter": "챕터 선택",
         "round_select": "라운드 선택",
         "round_game": "라운드 게임",
@@ -120,7 +129,6 @@ def show_menu(
             if st.button("1. 메인 화면으로 이동", use_container_width=True):
                 switch_page("start")
 
-        if current_page not in set(["start", "prolog"]):
             if st.button(
                 f"2. 이전 ({page_name_mapper[prev_page]}) 화면으로 이동",
                 use_container_width=True,
