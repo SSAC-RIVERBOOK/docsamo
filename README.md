@@ -17,13 +17,15 @@
 - AI/ML: LangChain
 
 ## 프로젝트 구조
+아래 구조에 포함되지 않은 파일들은 아직 구현이 완료되지 않은 테스트 파일들 입니다.
 
 ```
 ├── Asset/          # 이미지 파일들
 ├── folktales/      # 예시 전래동화 데이터
 ├── pages/          # 스트림릿 페이지 컴포넌트
 ├── prompts/        # LLM 프롬프트 템플릿
-├── utils.py        # 유틸리티 함수
+├── initialize_redis.py  # Redis 초기 데이터 설정
+├── utils.py        # streamlit 관련 유틸리티
 ├── redis_utils.py  # Redis 관련 유틸리티
 ├── langchain_utils.py  # LangChain 관련 유틸리티
 └── start.py        # 메인 애플리케이션 진입점
